@@ -104,27 +104,26 @@ document.querySelectorAll('#student-modal-body button').forEach(elem => {
 })
 
 // Populate table
-const students = get('students')
-if (students) {
-    students.sort((a, b) => a.lastName.localeCompare(b.lastName));
+const students = get('students') || []
+students.sort((a, b) => a.lastName.localeCompare(b.lastName));
 
-    const table = document.getElementById('student-list')
+const table = document.getElementById('student-list')
 
-    students.forEach(student => {
-        const row = table.insertRow()
-        let lastNameCell = row.insertCell(0)
-        let firstNameCell = row.insertCell(1)
-        let remainingCell = row.insertCell(2)
-        let actionsCell = row.insertCell(3)
-    
-        lastNameCell.innerHTML = student.lastName
-        firstNameCell.innerHTML = student.firstName
-        remainingCell.innerHTML = student.paid - student.used
-        actionsCell.innerHTML = `<button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#student-modal" data-bs-student-id=${student.id}><i data-feather="log-in"></i></button>`
-    
-        remainingCell.setAttribute('data-remaining-cell-id', student.id)
-    })
-}
+students.forEach(student => {
+    const row = table.insertRow()
+    let lastNameCell = row.insertCell(0)
+    let firstNameCell = row.insertCell(1)
+    let remainingCell = row.insertCell(2)
+    let actionsCell = row.insertCell(3)
+
+    lastNameCell.innerHTML = student.lastName
+    firstNameCell.innerHTML = student.firstName
+    remainingCell.innerHTML = student.paid - student.used
+    actionsCell.innerHTML = `<button class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#student-modal" data-bs-student-id=${student.id}><i data-feather="log-in"></i></button>`
+
+    remainingCell.setAttribute('data-remaining-cell-id', student.id)
+})
+
 
 function addStudent() {
     const students = get('students') || []
@@ -145,6 +144,15 @@ function addStudent() {
     set('students', students)
 
     setTimeout(window.location.reload(), 1000)
+}
+
+function downloadBackup() {
+    const students = get('students') || []
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(students));
+    let dlAnchorElem = document.getElementById('downloadAnchorElem');
+    dlAnchorElem.setAttribute("href", dataStr);
+    dlAnchorElem.setAttribute("download", "sauvegarde.json");
+    dlAnchorElem.click();
 }
 
 // Activate icons
