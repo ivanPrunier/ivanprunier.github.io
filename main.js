@@ -151,7 +151,15 @@ function downloadBackup() {
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(students));
     let dlAnchorElem = document.getElementById('downloadAnchorElem');
     dlAnchorElem.setAttribute("href", dataStr);
-    dlAnchorElem.setAttribute("download", "sauvegarde.json");
+
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    
+    today = dd + '-' + mm + '-' + yyyy;
+
+    dlAnchorElem.setAttribute("download", "sauvegarde-" + today + ".json");
     dlAnchorElem.click();
 }
 
